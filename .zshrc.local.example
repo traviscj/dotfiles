@@ -1,0 +1,2 @@
+# Machine-local shell config.
+export OPENAI_API_KEY="replace-me"

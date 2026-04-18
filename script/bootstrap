@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+backup_suffix=".pre-dotfiles-backup"
+
+files=(
+  ".claude/settings.json"
+  ".config/fish/conf.d/rustup.fish"
+  ".config/gh/config.yml"
+  ".config/git/ignore"
+  ".config/goose/config.yaml"
+  ".config/jj/config.toml"
+  ".emacs.d/init.el"
+  ".gitconfig"
+  ".profile"
+  ".tmux.conf"
+  ".zprofile"
+  ".zshenv"
+  ".zshrc"
+)
+
+for rel_path in "${files[@]}"; do
+  source_path="$repo_dir/$rel_path"
+  target_path="$HOME/$rel_path"
+
+  mkdir -p "$(dirname "$target_path")"
+
+  if [ -L "$target_path" ] && [ "$(readlink "$target_path")" = "$source_path" ]; then
+    continue
+  fi
+
+  if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+    mv "$target_path" "$target_path$backup_suffix"
+  fi
+
+  ln -s "$source_path" "$target_path"
+done
+
+if [ ! -f "$HOME/.zshrc.local" ] && [ -f "$repo_dir/.zshrc.local.example" ]; then
+  cp "$repo_dir/.zshrc.local.example" "$HOME/.zshrc.local"
+fi
+
+printf 'Dotfiles linked. Review %s for local secrets.\n' "$HOME/.zshrc.local"
