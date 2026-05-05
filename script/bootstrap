@@ -42,4 +42,11 @@ if [ ! -f "$HOME/.zshrc.local" ] && [ -f "$repo_dir/.zshrc.local.example" ]; the
   cp "$repo_dir/.zshrc.local.example" "$HOME/.zshrc.local"
 fi
 
+# Spaceship prompt — clone if missing.
+spaceship_dir="$HOME/.zsh/spaceship-prompt"
+if [ ! -d "$spaceship_dir" ]; then
+  mkdir -p "$HOME/.zsh"
+  git clone --depth=1 https://github.com/spaceship-prompt/spaceship-prompt.git "$spaceship_dir"
+fi
+
 printf 'Dotfiles linked. Review %s for local secrets.\n' "$HOME/.zshrc.local"

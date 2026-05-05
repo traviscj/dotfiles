@@ -3,10 +3,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
-# Prompt — zsh's bundled walters theme.
-autoload -Uz promptinit
-promptinit
-prompt walters
+# Prompt — Spaceship (cloned by script/bootstrap).
+[ -f "$HOME/.zsh/spaceship-prompt/spaceship.zsh-theme" ] && \
+  source "$HOME/.zsh/spaceship-prompt/spaceship.zsh-theme"
 
 case "$(uname)" in
   Darwin) alias ls='ls -G'; alias ll='ls -lG' ;;
@@ -16,6 +15,11 @@ alias p8='ping 8.8.8.8'
 alias clauded='claude --dangerously-skip-permissions'
 
 command -v navi >/dev/null 2>&1 && source <(navi widget zsh)
+
+# fzf keybindings + completion if installed.
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+[ -f /usr/share/doc/fzf/examples/completion.zsh ]   && source /usr/share/doc/fzf/examples/completion.zsh
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
