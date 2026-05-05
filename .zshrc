@@ -17,8 +17,8 @@ alias clauded='claude --dangerously-skip-permissions'
 command -v navi >/dev/null 2>&1 && source <(navi widget zsh)
 
 # fzf keybindings + completion if installed.
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-[ -f /usr/share/doc/fzf/examples/completion.zsh ]   && source /usr/share/doc/fzf/examples/completion.zsh
+[[ -o zle ]] && [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+[[ -o zle ]] && [ -f /usr/share/doc/fzf/examples/completion.zsh ]   && source /usr/share/doc/fzf/examples/completion.zsh
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 export PATH="$HOME/.local/bin:$PATH"
