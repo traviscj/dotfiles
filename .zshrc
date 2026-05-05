@@ -3,8 +3,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
-alias ls='ls -G'
-alias ll='ls -lG'
+case "$(uname)" in
+  Darwin) alias ls='ls -G'; alias ll='ls -lG' ;;
+  Linux)  alias ls='ls --color=auto'; alias ll='ls -lh --color=auto' ;;
+esac
 alias p8='ping 8.8.8.8'
 alias clauded='claude --dangerously-skip-permissions'
 
