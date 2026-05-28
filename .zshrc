@@ -37,4 +37,10 @@ export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
 autoload -U select-word-style
 select-word-style bash
 
+# Auto-escape ? & * etc. when typing/pasting URLs, so quotes aren't needed.
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+autoload -Uz bracketed-paste-magic
+zle -N bracketed-paste bracketed-paste-magic
+
 DISABLE_AUTO_TITLE="true"
