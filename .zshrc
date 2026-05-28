@@ -43,4 +43,10 @@ zle -N self-insert url-quote-magic
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
+# Completion: case-insensitive + minor typo correction (e.g. dev<TAB> -> Development).
+autoload -Uz compinit && compinit
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+
 DISABLE_AUTO_TITLE="true"
