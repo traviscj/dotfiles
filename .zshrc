@@ -24,6 +24,12 @@ command -v navi >/dev/null 2>&1 && source <(navi widget zsh)
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
 
+# Personal shell extras (autojump lazy-load, less highlighting, aliases).
+[ -f "$HOME/.zsh/traviscj.zsh" ] && source "$HOME/.zsh/traviscj.zsh"
+
+# Tip-of-the-day nudge: surfaces underused tools / flags once per half-day.
+[ -f "$HOME/.zsh/motd.zsh" ] && source "$HOME/.zsh/motd.zsh"
+
 # Keep shell-only secrets and machine-specific overrides out of git.
 [ -f "$HOME/.zshrc.local" ] && . "$HOME/.zshrc.local"
 

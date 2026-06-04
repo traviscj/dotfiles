@@ -19,6 +19,12 @@ files=(
   ".zprofile"
   ".zshenv"
   ".zshrc"
+  ".zsh/motd.zsh"
+  ".zsh/tips.txt"
+  ".zsh/traviscj.zsh"
+  ".taskrc"
+  ".config/bin/enhanced-git-branch.sh"
+  ".config/bin/ghmarkdown"
 )
 
 for rel_path in "${files[@]}"; do

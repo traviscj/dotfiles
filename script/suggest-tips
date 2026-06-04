@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# suggest-tips — propose new motd tips from real shell usage.
+#
+# Reads your zsh history + `brew leaves`, then surfaces:
+#   1. tools you installed but barely call (NUDGE candidates), and
+#   2. heavy use of a legacy tool when a modern replacement is installed.
+# Prints copy-pasteable `tip-add` lines. It never edits tips.txt itself —
+# you review, then run the lines you like (or `tip-add` your own).
+#
+# Usage: script/suggest-tips [histfile]   (default: $HISTFILE or ~/.zhistory)
+# Lenient on purpose: an empty section beats aborting mid-analysis.
+set -u
+
+histfile="${1:-${HISTFILE:-$HOME/.zhistory}}"
+tips_file="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.zsh/tips.txt"
+IDLE_MAX=3      # "barely used" if first-word count is below this
+HEAVY_MIN=20    # "heavy" legacy use worth nudging about
+
+[ -r "$histfile" ] || { echo "no readable history at $histfile" >&2; exit 1; }
+
+# first-word -> count (strip zsh extended-history ': <ts>:<dur>;' prefix)
+counts="$(sed -E 's/^: [0-9]+:[0-9]+;//' "$histfile" 2>/dev/null \
+  | awk '{print $1}' | grep -vE '^$' | sort | uniq -c)"
+count_of() { awk -v t="$1" '$2==t {print $1; f=1} END{if(!f)print 0}' <<<"$counts"; }
+
+# installed top-level formulae (strip tap prefix)
+leaves="$(brew leaves 2>/dev/null | sed 's#.*/##' || true)"
+have() { grep -qxF "$1" <<<"$leaves"; }
+
+# already-tipped text (avoid proposing dups)
+tipped() { cut -f2- "$tips_file" 2>/dev/null | grep -qiF -- "$1"; }
+
+echo "# suggest-tips — from $histfile"
+echo "# idle threshold <$IDLE_MAX calls, heavy legacy >=$HEAVY_MIN calls"
+echo
+
+# --- 1. installed-but-idle (formula name == command for these) -------------
+# Only consider formulae that resolve to a command of the same name — this drops
+# libraries (zimg, theora) and name-mismatched tools (the_silver_searcher -> ag).
+echo "## Installed but barely used (consider a NUDGE tip):"
+while read -r f; do
+  [ -n "$f" ] || continue
+  command -v "$f" >/dev/null 2>&1 || continue
+  c="$(count_of "$f")"
+  if [ "$c" -lt "$IDLE_MAX" ]; then printf '  %-20s %s calls\n' "$f" "$c"; fi
+done <<<"$leaves" | sort
+echo
+
+# --- 2. legacy-heavy with a modern replacement installed -------------------
+# rows: legacy<TAB>modern_formula<TAB>modern_cmd<TAB>tip text
+echo "## Heavy legacy use with a modern tool you already have — paste to add:"
+while IFS=$'\t' read -r legacy modern cmd text; do
+  [ -n "${legacy:-}" ] || continue
+  have "$modern" || continue
+  lc="$(count_of "$legacy")"; mc="$(count_of "$cmd")"
+  if [ "$lc" -ge "$HEAVY_MIN" ] && [ "$mc" -lt "$IDLE_MAX" ] && ! tipped "$cmd"; then
+    printf '  tip-add NUDGE "%s (you ran %s %sx, %s %sx)"\n' "$text" "$legacy" "$lc" "$cmd" "$mc"
+  fi
+done <<'ROWS'
+find	fd	fd	fd: faster, gitignore-aware file find
+cat	bat	bat	bat: cat with syntax highlight + git gutter
+ls	eza	eza	eza --tree --git: a better ls
+ag	ripgrep	rg	rg: faster search with --type filters and -U multiline
+grep	ripgrep	rg	rg: faster than grep, respects .gitignore
+du	dust	dust	dust: an intuitive du
+ps	procs	procs	procs: ps with color, tree, and search
+htop	bottom	btm	btm: graphical system monitor
+top	bottom	btm	btm: graphical system monitor
+diff	difftastic	difft	difft: structural (AST) diff
+man	tlrc	tldr	tldr: concise example-first man pages
+cd	zoxide	z	z: frecency dir jump (zoxide)
+j	zoxide	z	z: zoxide supersedes autojump and is actively maintained
+ROWS
+echo
+echo "# Review, then run the lines you want (or 'tip-add NUDGE|FLAG|NEW \"...\"')."

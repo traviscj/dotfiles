@@ -1,0 +1,5 @@
+#!/bin/bash
+# Note include, optional --email-obfuscation arg
+# was markdown_github
+pandoc -f gfm \
+   --email-obfuscation=references

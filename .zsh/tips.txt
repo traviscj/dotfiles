@@ -1,0 +1,35 @@
+# tip-of-the-day data. one tip per line: TAG<TAB>TEXT
+# TAG: NUDGE = installed but you ignore it | FLAG = option for a tool you hammer | NEW = worth installing
+# pick driven by your real .zhistory usage (ag 1317, cat 761, ls 717, less 662, git 2252, find 151, jj 257).
+# append freely. blank lines + #-comments ignored.
+
+NUDGE	fzf: stop copy-pasting slugs out of one buffer into another. `cmd | fzf` to pick a line interactively; Ctrl-R fuzzy-searches history; Ctrl-T inserts a file path. `git branch | fzf` then enter. You've run it ~0 times.
+NUDGE	fd: `fd foo` beats `find . -name '*foo*'` — respects .gitignore, colorized, regex by default. You ran `find` 151x and `fd` 0x.
+NUDGE	eza: `eza --tree --git --level=2` replaces both `ls` (717x) and `tree`. `eza -l --git` shows per-file git status in the long listing.
+NUDGE	glow: `glow FILE.md` renders markdown in the terminal instead of `cat`-ing raw syntax (you cat 761x). `glow -p` pages it.
+NUDGE	duckdb: query files directly, no import: `duckdb -c "select * from 'x.parquet' limit 5"` or `... from 'x.csv'`. Aggregations over CSV/parquet faster than awk.
+NUDGE	miller (mlr): `mlr --c2p cat data.csv` pretty-prints; `mlr --csv stats1 -a mean,p99 -f latency f.csv`. csv/json/tsv reshaping without pandas.
+NUDGE	csvtomd: `csvtomd data.csv` → a markdown table, paste-ready for PRs/docs.
+NUDGE	duf: `duf` is a readable `df` — colored, grouped by mount type.
+
+FLAG	ag: `-l` lists matching files only; `-G '\.py$'` restricts by filename regex; `-A3 -B1` adds context; `--ignore-dir`; `ag -0 -l | xargs -0` for safe piping. You run ag 1317x — these compound.
+FLAG	ag→rg: ripgrep is faster and has `--type yaml`/`--type-add`, `-C`, `--json`, multiline `-U`, and `rg --files` to just list tracked files. Your CLAUDE.md already says prefer rg; muscle memory still types ag 1317x.
+FLAG	git: `git switch`/`git restore` (clearer than checkout); `git add -p` stages hunks; `git log --oneline --graph --all`; `git -C ~/other-repo status` runs in another repo without cd; `git absorb` auto-fixups.
+FLAG	git reflog: nuked a branch or botched a reset? `git reflog` lists every HEAD position; `git reset --hard HEAD@{2}` rewinds. Nothing committed is ever really lost.
+FLAG	jj: `jj absorb` pushes working-copy changes into the right ancestor commits automatically; `jj squash -i` for interactive; `jj op log` + `jj undo` reverts ANY operation including a bad rebase. You use jj 257x.
+FLAG	less: `-S` chops long lines instead of wrapping (huge for logs/CSV); `-N` line numbers; `&pattern` filters to matching lines only; `F` follows like tail -f; `-X` leaves output on screen. You page with less 662x.
+FLAG	tree: `tree -L 2` limits depth; `tree -d` dirs only; `tree --gitignore` respects .gitignore; `tree -h` shows sizes.
+FLAG	curl: `-sS` = quiet but still show errors; `-w '%{http_code} %{time_total}\n'` prints timing; `--data-raw @file.json`; `-G --data-urlencode` builds query strings safely.
+
+NEW	atuin (30k★, updated daily): sqlite-backed shell history with full-text/fuzzy search + optional sync. Your .zhistory is a flat file that got wiped once — atuin makes it durable AND makes the kind of usage-analysis we just did a one-liner. Highest-leverage install for you. https://github.com/atuinsh/atuin
+NEW	zoxide (37k★): `z foo` jumps to the most-frecent dir matching foo. You use autojump's `j` 47x — zoxide is the actively-maintained successor (autojump is effectively abandoned). https://github.com/ajeetdsouza/zoxide
+NEW	bat (59k★): `cat` with syntax highlighting, line numbers, and a git change gutter. You cat 761x. Alias cat=bat and never look back. https://github.com/sharkdp/bat
+NEW	delta (31k★): syntax-highlighted git diffs/blame. Set `core.pager = delta`. You run git 2252x — this is the single biggest daily-surface upgrade. https://github.com/dandavison/delta
+NEW	mise (29k★, updated daily): one tool for runtime versions (replaces your pyenv + tfenv), env vars, AND a task runner — same niche as the `just` your team adopted, but also manages tool installs. https://github.com/jdx/mise
+NEW	jnv (6k★): interactive jq — pipe JSON in, build the filter live with fzf-style preview. Pairs with your curl-to-JSON workflow. https://github.com/ynqa/jnv
+NEW	qsv (3.6k★, updated daily): blazing CSV toolkit (slice, join, stats, frequency, dedup). Fits your duckdb/miller/parquet data-poking cluster. https://github.com/dathere/qsv
+NEW	visidata (9k★): terminal spreadsheet for csv/json/parquet/sqlite — open, sort, filter, pivot, frequency-table any tabular file interactively. https://github.com/saulpw/visidata
+NEW	lazygit (79k★): full-screen git TUI — stage hunks, rebase, cherry-pick, view diffs without remembering flags. For your 2252 git invocations. https://github.com/jesseduffield/lazygit
+NEW	difftastic (25k★): structural diff that parses syntax, so it diffs ASTs not lines — reflowed/reindented code shows the real change. `GIT_EXTERNAL_DIFF=difft git diff`. https://github.com/Wilfred/difftastic
+NEW	procs (6k★): `ps` replacement with colored columns, tree view, and search. dust (12k★): intuitive `du`. bottom (13k★): graphical system monitor. You use ps/du ~30x each.
+NEW	xh (8k★): friendlier+faster httpie/curl for JSON APIs: `xh POST host/api key=val`. Auto-JSON, colorized, sane defaults. https://github.com/ducaale/xh

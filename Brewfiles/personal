@@ -1,0 +1,99 @@
+# Brewfiles/personal — personal-mac-only. GUI apps, media, finance, local-LLM
+# experiments, heavy DB/lang stacks, and build deps. Applied on top of common.
+# Everything here came from the original single Brewfile minus what moved to common.
+
+tap "mongodb/brew"
+
+# GUI apps
+cask "obsidian"
+cask "rectangle"
+cask "github"
+cask "ngrok"
+cask "block-goose"
+
+# extra java / build tooling
+brew "gradle"
+brew "openjdk@17"
+
+# extra python versions
+brew "python@3.8"
+brew "python@3.9"
+brew "python@3.10"
+brew "python@3.11"
+brew "pipenv"
+brew "python-tabulate"
+
+# javascript runtimes
+brew "nvm"
+brew "pnpm"
+
+# alt languages / runtimes
+brew "erlang"
+brew "elixir"
+brew "guile"
+brew "fish"
+brew "docker"
+brew "docker-compose"
+
+# databases
+brew "mysql", restart_service: :changed
+brew "mysql-client"
+brew "mysql@8.4", restart_service: :changed
+brew "postgresql@14"
+brew "libpq"
+brew "pgcli"
+brew "mongosh"
+brew "mongodb/brew/mongodb-community"
+brew "rabbitmq", restart_service: :changed
+brew "spark"
+
+# local LLM experiments
+brew "llama.cpp"
+brew "ollama", restart_service: :changed
+
+# media / files
+brew "youtube-dl"
+brew "yt-dlp"
+brew "exiftool"
+brew "imessage-exporter"
+brew "poppler"
+brew "libtiff"
+brew "little-cms2"
+
+# finance / personal
+brew "hledger"
+brew "ledger"
+brew "twtxt"
+brew "hugo"
+
+# network / vpn
+brew "nmap"
+brew "speedtest-cli"
+brew "gping"
+brew "wireguard-go"
+brew "wireguard-tools"
+
+# docs / typesetting
+brew "texlive"
+
+# toys
+brew "figlet"
+brew "cowsay"
+brew "zenity"
+
+# build deps / explicitly-installed transitives (kept so nothing is lost on a
+# fresh machine; prune any you find you don't actually need directly)
+brew "automake"
+brew "libtool"
+brew "pkgconf"
+brew "flex"
+brew "libyaml"
+brew "json-c"
+brew "boost"
+brew "gpgme"
+brew "p11-kit"
+brew "unbound"
+brew "gnutls"
+brew "ossp-uuid"
+brew "tcl-tk"
+brew "wxwidgets"

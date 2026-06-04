@@ -1,0 +1,70 @@
+# Brewfiles/common — portable baseline. Safe to install on ANY machine.
+# CLI staples worth having everywhere. No GUI apps, no heavy DB/lang stacks,
+# no work/Square-internal tooling (that stays in the Square config_files repo).
+# Applied together with one profile file via the justfile. Move a line to
+# Brewfiles/personal if it turns out to be mac-specific.
+
+tap "homebrew/services"
+
+# search / navigation
+brew "fzf"
+brew "zoxide"
+brew "autojump"
+brew "navi"
+brew "the_silver_searcher"
+brew "ripgrep"
+brew "tree"
+
+# version control
+brew "gh"
+brew "jj"
+brew "jjui"
+brew "lazygit"
+
+# editors / shells / multiplexers
+brew "emacs", restart_service: :changed
+brew "tmux"
+brew "watch"
+
+# core languages / runtimes
+brew "go"
+brew "openjdk"
+brew "node"
+brew "python@3.12"
+
+# python tooling
+brew "ipython"
+brew "pipx"
+brew "poetry"
+
+# data / json / docs
+brew "jq"
+brew "pandoc"
+
+# http / net
+brew "curl"
+brew "wget"
+brew "httpie"
+
+# build
+brew "cmake"
+
+# security
+brew "gnupg"
+
+# misc cli quality-of-life
+brew "bat"
+brew "cloc"
+brew "howdoi"
+brew "htop"
+brew "tldr"
+brew "task"
+brew "taskwarrior-tui"
+
+# prompt (cargo)
+cargo "starship"
+cargo "starship-jj"
+
+# AI coding CLIs
+cask "claude-code@latest"
+brew "opencode"

@@ -3,3 +3,26 @@
 [user]
 name = "Travis Johnson"
 email = "traviscj@traviscj.com"
+
+[aliases]
+
+# pushes by creating a bookmark for the current head
+cl = ['git', 'push', '-c', '@-']
+
+# fetch from all remotes (disabled by default — noisy on large shared repos)
+# sync = ['git', 'fetch', '--all-remotes']
+
+evolve = ['rebase', '--skip-emptied', '-d', 'master']
+
+upload = ['git', 'push', '--all']
+
+# take the closest ancestor bookmark and move it to the current change
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@"]
+# same, but move it to the current change's parent
+tug- = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
+
+[git]
+push-branch-prefix = "traviscj/"
+
+[revsets]
+log = '@ | ancestors(trunk()..(visible_heads() & mine()), 2) | trunk()'
